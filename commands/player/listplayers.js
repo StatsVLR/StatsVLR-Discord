@@ -32,14 +32,15 @@ module.exports = {
         )
         .addIntegerOption(option =>
             option.setName('limit')
-                .setDescription('Number of results per page (default is 10)')
+                .setDescription('Number of results per page (default is 8)')
                 .setMinValue(1)
+                .setMaxValue(8)
         ),
 
     async execute(interaction) {
         const region = interaction.options.getString('region') || 'all';
         const page = interaction.options.getInteger('page') || 1;
-        const limit = interaction.options.getInteger('limit') || 10;
+        const limit = interaction.options.getInteger('limit') || 8;
 
         await interaction.deferReply();
 
@@ -60,18 +61,19 @@ module.exports = {
                 });
             }
 
-            let description = '';
-
-            data.forEach((team, index) => {
-                description += `${index + 1}. **${team.name}**\n   - **Country:** ${team.country || 'Unknown'}\n\n`;
-            });
-
             const embed = new EmbedBuilder()
                 .setTitle(`Teams in Region: ${region.toUpperCase()}`)
                 .setColor(embedColor)
-                .setDescription(description.trim())
                 .setFooter({ text: `Page ${pagination.page} of ${pagination.totalPages}` })
                 .setTimestamp();
+
+            data.forEach((team, index) => {
+                embed.addFields(
+                    { name: `Team ${index + 1}`, value: team.name, inline: true },
+                    { name: 'Country', value: team.country || 'Unknown', inline: true },
+                    { name: 'Stats', value: `[View](${team.url})`, inline: true }
+                );
+            });
 
             await interaction.editReply({ embeds: [embed] });
         } catch (error) {
