@@ -60,18 +60,18 @@ module.exports = {
                 });
             }
 
+            let description = '';
+
+            data.forEach((team, index) => {
+                description += `${index + 1}. **${team.name}**\n   - **Country:** ${team.country || 'Unknown'}\n\n`;
+            });
+
             const embed = new EmbedBuilder()
                 .setTitle(`Teams in Region: ${region.toUpperCase()}`)
                 .setColor(embedColor)
+                .setDescription(description.trim())
                 .setFooter({ text: `Page ${pagination.page} of ${pagination.totalPages}` })
                 .setTimestamp();
-
-            data.forEach(team => {
-                embed.addFields([
-                    { name: 'Name', value: `[${team.name}](${team.url})`, inline: true },
-                    { name: 'Country', value: team.country || 'Unknown', inline: true }
-                ]);
-            });
 
             await interaction.editReply({ embeds: [embed] });
         } catch (error) {
