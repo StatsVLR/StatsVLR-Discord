@@ -1,0 +1,12 @@
+{
+    "name": "stastvlr-discor-bot",
+    "version": "1.0.0",
+    "description": "A simple Discord bot that uses StatsVLR API.",
+    "main": "index.js",
+    "dependencies": {
+      "discord.js": "^14.0.0",
+      "@discordjs/rest": "^0.4.0",
+      "discord-api-types": "^0.31.0"
+    }
+  }
+  
