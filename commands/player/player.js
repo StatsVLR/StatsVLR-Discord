@@ -4,7 +4,7 @@ const { api_url, embedColor } = require('../../config.json');
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('infoplayer')
+        .setName('player')
         .setDescription('Fetches detailed information about a specific Valorant player.')
         .addStringOption(option =>
             option.setName('playerid')
