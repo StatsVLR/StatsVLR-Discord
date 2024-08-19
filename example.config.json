@@ -1,0 +1,9 @@
+{
+    "token": "YOUR_BOT_TOKEN",
+    "clientId": "YOUR_CLIENT_ID",
+    "embedColor": "#00FF00",
+    "errorColor": "#FF0000",
+    "successColor": "#00FF00",
+    "api_url": "https://api.example.com"
+  }
+  
