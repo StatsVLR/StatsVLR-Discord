@@ -268,6 +268,30 @@ Response:
 ```
 </details>
 
+## Commands
+
+Here is a list of the command files used in the project:
+
+- **Events Commands:**
+  - `commands/events/events.js`
+  
+- **Matches Commands:**
+  - `commands/matches/matches.js`
+
+- **Panel Commands:**
+  - `commands/panel/panel.js`
+
+- **Player Commands:**
+  - `commands/player/listplayers.js`
+  - `commands/player/player.js`
+
+- **Results Commands:**
+  - `commands/results/result.js`
+
+- **Team Commands:**
+  - `commands/team/listteams.js`
+  - `commands/team/team.js`
+
 ## Project Tree
 
 ```
