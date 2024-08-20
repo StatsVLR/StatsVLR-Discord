@@ -13,7 +13,7 @@ module.exports = {
                 await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
             }
         } else if (interaction.isButton()) {
-            const buttonHandler = require('./modalCreate');
+            const buttonHandler = require('./modal/modalCreate');
             try {
                 await buttonHandler.execute(interaction);
             } catch (error) {
@@ -21,7 +21,7 @@ module.exports = {
                 await interaction.reply({ content: 'There was an error while processing your button interaction.', ephemeral: true });
             }
         } else if (interaction.isModalSubmit()) {
-            const modalHandler = require('./modalData');
+            const modalHandler = require('./modal/modalData');
             try {
                 await modalHandler.execute(interaction);
             } catch (error) {
