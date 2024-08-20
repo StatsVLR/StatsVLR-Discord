@@ -15,7 +15,7 @@ module.exports = {
     async execute(interaction) {
         const teamId = interaction.options.getString('teamid');
 
-        await interaction.deferReply();
+        await interaction.deferReply({ ephemeral: true });
 
         try {
             const response = await axios.get(`${api_url}/api/v1/teams/${teamId}`);
@@ -24,6 +24,7 @@ module.exports = {
             if (!data) {
                 return interaction.editReply({
                     content: 'No data found for the specified team ID.',
+                    ephemeral: true
                 });
             }
 
@@ -89,11 +90,12 @@ module.exports = {
                 });
             }
 
-            await interaction.editReply({ embeds: [embed] });
+            await interaction.editReply({ embeds: [embed], ephemeral: true });
         } catch (error) {
             console.error('Error fetching team data:', error);
             await interaction.editReply({
                 content: 'There was an error fetching the team information. Please try again later.',
+                ephemeral: true 
             });
         }
     },
