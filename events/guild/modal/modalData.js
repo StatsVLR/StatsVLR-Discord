@@ -1,6 +1,6 @@
 const axios = require('axios');
 const { EmbedBuilder } = require('discord.js');
-const { api_url, embedColor } = require('../../config.json');
+const { api_url, embedColor } = require('../../../config.json');
 
 module.exports = {
     async execute(interaction) {

@@ -35,7 +35,7 @@ module.exports = {
                 await interaction.showModal(modal);
             }
         } catch (error) {
-            console.error('Error handling button interaction:', error);
+            console.error('Error handling interaction:', error);
             await interaction.reply({ content: 'There was an error while processing your request.', ephemeral: true });
         }
     },
