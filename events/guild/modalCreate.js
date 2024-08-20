@@ -41,9 +41,56 @@ module.exports = {
                 }
             } catch (error) {
                 console.error('Error fetching player data:', error);
-                await interaction.editReply({ content: 'There was an error fetching player information.', ephemeral: true });
+                await interaction.editReply({ content: 'There was an error fetching player information. Please check the player ID and try again.', ephemeral: true });
             }
         } else if (interaction.customId === 'teamModal') {
+            const teamId = interaction.fields.getTextInputValue('teamid');
+            await interaction.deferReply({ ephemeral: true });
+
+            try {
+                const response = await axios.get(`${api_url}/api/v1/teams/${teamId}`);
+                const teamData = response.data;
+
+                if (teamData.status === 'OK' && teamData.data) {
+                    const { info, players, staff } = teamData.data;
+
+                    const embed = new EmbedBuilder()
+                        .setTitle(info.name)
+                        .setThumbnail(info.logo)
+                        .setColor(embedColor)
+                        .addFields(
+                            { name: 'Tag', value: info.tag || 'N/A', inline: true }
+                        )
+                        .setTimestamp();
+
+                    if (players.length > 0) {
+                        let playersDescription = 'Players:\n';
+                        players.forEach(player => {
+                            playersDescription += `- **${player.name}** (${player.country})\n`;
+                        });
+                        embed.addFields({ name: 'Players', value: playersDescription, inline: false });
+                    } else {
+                        embed.addFields({ name: 'Players', value: 'N/A', inline: false });
+                    }
+
+                    if (staff.length > 0) {
+                        let staffDescription = 'Staff:\n';
+                        staff.forEach(member => {
+                            staffDescription += `- **${member.name}** (${member.country})\n`;
+                        });
+                        embed.addFields({ name: 'Staff', value: staffDescription, inline: false });
+                    } else {
+                        embed.addFields({ name: 'Staff', value: 'N/A', inline: false });
+                    }
+
+                    await interaction.editReply({ embeds: [embed] });
+                } else {
+                    await interaction.editReply({ content: 'No team data found or invalid team ID.', ephemeral: true });
+                }
+            } catch (error) {
+                console.error('Error fetching team data:', error);
+                await interaction.editReply({ content: 'There was an error fetching team information. Please check the team ID and try again.', ephemeral: true });
+            }
         }
     },
 };
