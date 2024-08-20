@@ -6,6 +6,18 @@ The StatsVLR-Discord bot enhances your Discord experience by providing comprehen
 - **Team Insights:** Get detailed data about Valorant teams, including player rosters, staff, results, and upcoming matches.
 - **Match and Event Data:** Access results from past matches, view upcoming fixtures, and explore event details such as dates, prize pools, and statuses.
 
+## Table of Contents
+
+- [Features](#features)
+- [Commands](#commands)
+- [Project Tree](#project-tree)
+- [Setup](#setup)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+- [Troubleshooting](#troubleshooting)
+- [Contribution](#contribution)
+- [License](#license)
+
 ## Features
 
 <details>
@@ -364,7 +376,9 @@ Here is a list of available commands and their descriptions:
   This message typically means there's an issue with the API call or the interaction. Check the console for any error messages and verify your API endpoints.
 
 - **Error: "Invalid ID provided"**  
-  This error occurs if the ID provided does not match any data in the API. Double-check the ID and ensure it is correct.
+  This error
+
+ occurs if the ID provided does not match any data in the API. Double-check the ID and ensure it is correct.
 
 ## Contribution
 
