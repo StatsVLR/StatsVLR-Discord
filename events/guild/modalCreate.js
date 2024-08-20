@@ -40,8 +40,7 @@ module.exports = {
                     await interaction.editReply({ content: 'No player data found or invalid player ID.', ephemeral: true });
                 }
             } catch (error) {
-                console.error('Error fetching player data:', error);
-                await interaction.editReply({ content: 'There was an error fetching player information. Please check the player ID and try again.', ephemeral: true });
+                await interaction.editReply({ content: 'Invalid player ID provided. Please check the ID and try again.', ephemeral: true });
             }
         } else if (interaction.customId === 'teamModal') {
             const teamId = interaction.fields.getTextInputValue('teamid');
@@ -88,8 +87,7 @@ module.exports = {
                     await interaction.editReply({ content: 'No team data found or invalid team ID.', ephemeral: true });
                 }
             } catch (error) {
-                console.error('Error fetching team data:', error);
-                await interaction.editReply({ content: 'There was an error fetching team information. Please check the team ID and try again.', ephemeral: true });
+                await interaction.editReply({ content: 'Invalid team ID provided. Please check the ID and try again.', ephemeral: true });
             }
         }
     },
