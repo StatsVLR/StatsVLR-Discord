@@ -268,6 +268,42 @@ Response:
 ```
 </details>
 
+## Project Tree
+
+```
+📦 
+├─ .gitignore
+├─ LICENSE
+├─ README.md
+├─ commands
+│  ├─ events
+│  │  └─ events.js
+│  ├─ matches
+│  │  └─ matches.js
+│  ├─ panel
+│  │  └─ panel.js
+│  ├─ player
+│  │  ├─ listplayers.js
+│  │  └─ player.js
+│  ├─ results
+│  │  └─ result.js
+│  └─ team
+│     ├─ listteams.js
+│     └─ team.js
+├─ events
+│  ├─ client
+│  │  └─ ready.js
+│  └─ guild
+│     ├─ interactionCreate.js
+│     └─ modal
+│        ├─ modalCreate.js
+│        └─ modalData.js
+├─ example.config.json
+├─ index.js
+├─ package-lock.json
+└─ package.json
+```
+
 ## Setup
 
 ### Prerequisites
