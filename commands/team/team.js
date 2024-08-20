@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 const axios = require('axios');
 const { api_url, embedColor } = require('../../config.json');
 
@@ -54,48 +54,20 @@ module.exports = {
                 embed.addFields({ name: 'Staff', value: staffDescription, inline: false });
             }
 
-            if (data.results.length > 0) {
-                let resultsChunks = [];
-                let currentChunk = '';
-                data.results.forEach(result => {
-                    const resultDescription = `**Event:** ${result.event.name}\n${result.teams.map(team => `- **${team.name}** (${team.tag}): ${team.points} points`).join('\n')}\n\n`;
-                    if (currentChunk.length + resultDescription.length > 1024) {
-                        resultsChunks.push(currentChunk);
-                        currentChunk = '';
-                    }
-                    currentChunk += resultDescription;
-                });
-                if (currentChunk) resultsChunks.push(currentChunk);
+            const row = new ActionRowBuilder()
+                .addComponents(
+                    new ButtonBuilder()
+                        .setCustomId(`team_results_${teamId}`) 
+                        .setLabel('Results')
+                        .setStyle(ButtonStyle.Primary)
+                );
 
-                resultsChunks.forEach((chunk, index) => {
-                    embed.addFields({ name: `Results ${index + 1}`, value: chunk.trim(), inline: false });
-                });
-            }
-
-            if (data.upcoming.length > 0) {
-                let upcomingChunks = [];
-                let currentChunk = '';
-                data.upcoming.forEach(match => {
-                    const matchDescription = `**Event:** ${match.event.name}\n${match.teams.map(team => `- **${team.name}** (${team.tag})`).join('\n')}\n\n`;
-                    if (currentChunk.length + matchDescription.length > 1024) {
-                        upcomingChunks.push(currentChunk);
-                        currentChunk = '';
-                    }
-                    currentChunk += matchDescription;
-                });
-                if (currentChunk) upcomingChunks.push(currentChunk);
-
-                upcomingChunks.forEach((chunk, index) => {
-                    embed.addFields({ name: `Upcoming Matches ${index + 1}`, value: chunk.trim(), inline: false });
-                });
-            }
-
-            await interaction.editReply({ embeds: [embed], ephemeral: true });
+            await interaction.editReply({ embeds: [embed], components: [row], ephemeral: true });
         } catch (error) {
             console.error('Error fetching team data:', error);
             await interaction.editReply({
                 content: 'There was an error fetching the team information. Please try again later.',
-                ephemeral: true 
+                ephemeral: true
             });
         }
     },

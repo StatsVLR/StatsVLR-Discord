@@ -8,7 +8,7 @@ module.exports = {
     async execute(interaction) {
         const embed = new EmbedBuilder()
             .setTitle('Interactive Panel')
-            .setDescription('Click one of the buttons below:')
+            .setDescription('Click a button to fetch information:')
             .setColor('#0099ff')
             .setTimestamp();
 
@@ -27,6 +27,7 @@ module.exports = {
         await interaction.reply({
             embeds: [embed],
             components: [row],
+            ephemeral: true,
         });
     },
 };
