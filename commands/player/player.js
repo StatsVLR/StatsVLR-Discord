@@ -14,13 +14,13 @@ module.exports = {
 
     async execute(interaction) {
         const playerId = interaction.options.getString('playerid');
-        await interaction.deferReply();
+        await interaction.deferReply({ ephemeral: true });
 
         try {
             const response = await axios.get(`${api_url}/api/v1/players/${playerId}`);
 
             if (!response.data || !response.data.data) {
-                return interaction.editReply({ content: 'Unexpected response structure from API.' });
+                return interaction.editReply({ content: 'Unexpected response structure from API.', ephemeral: true });
             }
 
             const playerData = response.data.data;
@@ -80,11 +80,12 @@ module.exports = {
                 embed.addFields({ name: 'Past Teams', value: pastTeams, inline: false });
             }
 
-            await interaction.editReply({ embeds: [embed] });
+            await interaction.editReply({ embeds: [embed], ephemeral: true });
         } catch (error) {
             console.error('Error fetching player data:', error);
             await interaction.editReply({
                 content: 'There was an error fetching player information. Please try again later.',
+                ephemeral: true
             });
         }
     },

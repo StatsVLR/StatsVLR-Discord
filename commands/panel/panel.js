@@ -8,7 +8,7 @@ module.exports = {
     async execute(interaction) {
         const embed = new EmbedBuilder()
             .setTitle('Interactive Panel')
-            .setDescription('Click one button:')
+            .setDescription('Click one of the buttons below:')
             .setColor('#0099ff')
             .setTimestamp();
 
@@ -27,21 +27,6 @@ module.exports = {
         await interaction.reply({
             embeds: [embed],
             components: [row],
-        });
-
-        const filter = i => i.customId === 'player' || i.customId === 'team';
-        const collector = interaction.channel.createMessageComponentCollector({ filter, time: 15000 });
-
-        collector.on('collect', async i => {
-            if (i.customId === 'player') {
-                await i.reply({ content: 'You clicked the Player button!', ephemeral: true });
-            } else if (i.customId === 'team') {
-                await i.reply({ content: 'You clicked the Team button!', ephemeral: true });
-            }
-        });
-
-        collector.on('end', collected => {
-            console.log(`Collected ${collected.size} interactions.`);
         });
     },
 };
