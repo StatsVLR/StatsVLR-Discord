@@ -270,27 +270,18 @@ Response:
 
 ## Commands
 
-Here is a list of the command files used in the project:
+Here is a list of available commands and their descriptions:
 
-- **Events Commands:**
-  - `commands/events/events.js`
-  
-- **Matches Commands:**
-  - `commands/matches/matches.js`
-
-- **Panel Commands:**
-  - `commands/panel/panel.js`
-
-- **Player Commands:**
-  - `commands/player/listplayers.js`
-  - `commands/player/player.js`
-
-- **Results Commands:**
-  - `commands/results/result.js`
-
-- **Team Commands:**
-  - `commands/team/listteams.js`
-  - `commands/team/team.js`
+- **Events:** Provides information about all events.
+- **Matches:** Provides information about upcoming matches or matches being played.
+- **Panel:** Manages the command panel for interaction with the bot.
+- **Player:**
+  - **List Players:** Provides information about Valorant players.
+  - **Player Info:** Provides information about a specific Valorant Esports player.
+- **Results:** Provides information about the results of games already played.
+- **Team:**
+  - **List Teams:** Provides information about all teams.
+  - **Team Info:** Provides detailed information about a Valorant team.
 
 ## Project Tree
 
