@@ -268,6 +268,21 @@ Response:
 ```
 </details>
 
+## Commands
+
+Here is a list of available commands and their descriptions:
+
+- **Events:** Provides information about all events.
+- **Matches:** Provides information about upcoming matches or matches being played.
+- **Panel:** Manages the command panel for interaction with the bot.
+- **Player:**
+  - **List Players:** Provides information about Valorant players.
+  - **Player Info:** Provides information about a specific Valorant Esports player.
+- **Results:** Provides information about the results of games already played.
+- **Team:**
+  - **List Teams:** Provides information about all teams.
+  - **Team Info:** Provides detailed information about a Valorant team.
+
 ## Project Tree
 
 ```
