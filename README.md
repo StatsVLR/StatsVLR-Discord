@@ -356,14 +356,17 @@ Here is a list of available commands and their descriptions:
 
 3. **Configure your bot:**
 
-    Create a `.env` file in the root directory of the project with the following content:
-
-    ```env
-    DISCORD_TOKEN=
-    API_URL=
-    EMBED_COLOR=
+    ```json
+    {
+      "token": "",
+      "clientId": "",
+      "embedColor": "#00FF00",
+      "errorColor": "#FF0000",
+      "successColor": "#00FF00",
+      "api_url": "https://statsvlr.n0step.xyz"
+    }
     ```
-
+  
 4. **Run the bot:**
 
     ```bash
