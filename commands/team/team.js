@@ -57,7 +57,7 @@ module.exports = {
             const row = new ActionRowBuilder()
                 .addComponents(
                     new ButtonBuilder()
-                        .setCustomId(`team_results_${teamId}`) 
+                        .setCustomId(`team_results_${teamId}`)
                         .setLabel('Results')
                         .setStyle(ButtonStyle.Primary)
                 );
