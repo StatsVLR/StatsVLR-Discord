@@ -9,7 +9,6 @@ const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
 client.commands = new Collection();
 
-// Reading command files
 const commandFolders = fs.readdirSync('./commands');
 
 for (const folder of commandFolders) {
@@ -20,7 +19,6 @@ for (const folder of commandFolders) {
     }
 }
 
-// Reading event files
 const eventFolders = fs.readdirSync('./events');
 
 for (const folder of eventFolders) {
@@ -35,7 +33,6 @@ for (const folder of eventFolders) {
     }
 }
 
-// Deploy slash commands globally
 const commands = client.commands.map(cmd => cmd.data.toJSON());
 const rest = new REST({ version: '9' }).setToken(token);
 
