@@ -12,41 +12,33 @@ module.exports = {
 
         try {
             const response = await axios.get(`${api_url}/api/v1/matches`);
-            
+
             if (!response.data || !response.data.data || response.data.data.length === 0) {
                 return interaction.editReply({ content: 'No matches found.' });
             }
 
             const matches = response.data.data;
-            const maxEmbedsPerPage = 10;
-            const totalPages = Math.ceil(matches.length / maxEmbedsPerPage);
+            const totalPages = matches.length;
 
-            const createEmbeds = (page) => {
-                const embeds = [];
-                const start = (page - 1) * maxEmbedsPerPage;
-                const end = Math.min(start + maxEmbedsPerPage, matches.length);
+            const createEmbed = (page) => {
+                const match = matches[page - 1];
+                const embed = new EmbedBuilder()
+                    .setTitle(`Event: ${match.event}`)
+                    .setDescription(`Tournament: ${match.tournament}`)
+                    .setColor(embedColor)
+                    .setThumbnail(match.img)
+                    .addFields(
+                        { name: 'Teams', value: match.teams.map(t => `${t.name} (${t.country}) - Score: ${t.score}`).join('\n') },
+                        { name: 'Status', value: match.status },
+                        { name: 'In', value: match.in }
+                    )
+                    .setFooter({ text: `Page ${page} of ${totalPages}` })
+                    .setTimestamp();
 
-                for (let i = start; i < end; i++) {
-                    const match = matches[i];
-                    const embed = new EmbedBuilder()
-                        .setTitle(`Event: ${match.event}`)
-                        .setDescription(`Tournament: ${match.tournament}`)
-                        .setColor(embedColor)
-                        .setThumbnail(match.img)
-                        .addFields(
-                            { name: 'Teams', value: match.teams.map(t => `${t.name} (${t.country}) - Score: ${t.score}`).join('\n') },
-                            { name: 'Status', value: match.status },
-                            { name: 'In', value: match.in }
-                        )
-                        .setTimestamp();
-
-                    embeds.push(embed);
-                }
-
-                return embeds;
+                return embed;
             };
 
-            const embedPages = createEmbeds(1);
+            const embed = createEmbed(1);
 
             const components = [];
             if (totalPages > 1) {
@@ -67,7 +59,7 @@ module.exports = {
             }
 
             const message = await interaction.editReply({
-                embeds: embedPages,
+                embeds: [embed],
                 components: components
             });
 
@@ -83,10 +75,10 @@ module.exports = {
                     currentPage--;
                 }
 
-                const newEmbeds = createEmbeds(currentPage);
+                const newEmbed = createEmbed(currentPage);
 
                 await i.update({
-                    embeds: newEmbeds,
+                    embeds: [newEmbed],
                     components: [
                         new ActionRowBuilder()
                             .addComponents(
