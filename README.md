@@ -11,6 +11,7 @@ The StatsVLR-Discord bot enhances your Discord experience by providing comprehen
 - [Features](#features)
 - [Commands](#commands)
 - [Project Tree](#project-tree)
+- [Todo](#todo)
 - [Setup](#setup)
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
@@ -330,6 +331,45 @@ Here is a list of available commands and their descriptions:
 ├─ package-lock.json
 └─ package.json
 ```
+
+## Todo:
+
+### Completed:
+
+- Events
+- Matches
+- Result
+- News
+- Players
+  - List All Players
+- Team
+  - List All Teams
+- Panel
+  - Find Player
+  - Find Team
+- Autopost news in a channel
+- Player stats from tracker.gg
+
+### Yet to Do:
+
+- Agents
+- Buddies
+- Bundles
+- Ceremonies
+- Competitive Tiers
+- Content Tiers
+- Contracts
+- Currencies
+- Gamemodes
+- Gear
+- Level Borders
+- Maps
+- Player Cards
+- Player Titles
+- Seasons
+- Sprays
+- Weapons
+
 
 ## Setup
 
