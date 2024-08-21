@@ -4,42 +4,44 @@ const { api_url, embedColor } = require('../../config.json');
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('results')
-        .setDescription('Fetches and displays the latest game results.'),
+        .setName('news')
+        .setDescription('Fetches and displays the latest news articles.'),
 
     async execute(interaction) {
         await interaction.deferReply();
 
         try {
-            const response = await axios.get(`${api_url}/api/v1/results?page=1`);
+            const response = await axios.get(`${api_url}/api/v1/news`);
             
-            if (!response.data || !response.data.data || response.data.data.length === 0) {
-                return interaction.editReply({ content: 'No results found.' });
+            if (!response || !response.data || response.data.status !== 'OK' || !Array.isArray(response.data.data)) {
+                return interaction.editReply({ content: 'No news articles found.' });
             }
 
-            const results = response.data.data;
-            const totalPages = results.length;
+            const newsSegments = response.data.data;
+            const totalPages = newsSegments.length;
+
+            if (totalPages === 0) {
+                return interaction.editReply({ content: 'No news articles found.' });
+            }
 
             const createEmbed = (page) => {
-                const result = results[page - 1];
+                const article = newsSegments[page - 1];
+                const descriptionWords = article.description.split(' ');
+                const title = descriptionWords.length > 4 ? 
+                    `${descriptionWords.slice(0, 4).join(' ')}...` : 
+                    article.description;
+                
                 const embed = new EmbedBuilder()
-                    .setTitle(`Event: ${result.event}`)
-                    .setDescription(`Tournament: ${result.tournament}`)
+                    .setTitle(title || 'No Title')
+                    .setDescription(article.description || 'No Description')
                     .setColor(embedColor)
-                    .setThumbnail(result.img)
-                    .setTimestamp()
-                    .setFooter({ text: `Page ${page} of ${totalPages}` });
-
-                result.teams.forEach(team => {
-                    embed.addFields(
-                        { name: team.name, value: `Score: ${team.score}`, inline: true }
-                    );
-                });
-
-                embed.addFields(
-                    { name: 'Status', value: result.status, inline: true },
-                    { name: 'Ago', value: result.ago, inline: true }
-                );
+                    .setURL(article.url_path)
+                    .addFields(
+                        { name: 'Author', value: article.author || 'Unknown', inline: true },
+                        { name: 'Date', value: article.date || 'No Date', inline: true }
+                    )
+                    .setFooter({ text: `Page ${page} of ${totalPages}` })
+                    .setTimestamp();
 
                 return embed;
             };
@@ -81,26 +83,33 @@ module.exports = {
                     currentPage--;
                 }
 
+                if (currentPage < 1) currentPage = 1;
+                if (currentPage > totalPages) currentPage = totalPages;
+
                 const newEmbed = createEmbed(currentPage);
 
-                await i.update({
-                    embeds: [newEmbed],
-                    components: [
-                        new ActionRowBuilder()
-                            .addComponents(
-                                new ButtonBuilder()
-                                    .setCustomId('previous')
-                                    .setLabel('Previous')
-                                    .setStyle(ButtonStyle.Secondary)
-                                    .setDisabled(currentPage === 1),
-                                new ButtonBuilder()
-                                    .setCustomId('next')
-                                    .setLabel('Next')
-                                    .setStyle(ButtonStyle.Primary)
-                                    .setDisabled(currentPage === totalPages)
-                            )
-                    ]
-                });
+                try {
+                    await i.update({
+                        embeds: [newEmbed],
+                        components: [
+                            new ActionRowBuilder()
+                                .addComponents(
+                                    new ButtonBuilder()
+                                        .setCustomId('previous')
+                                        .setLabel('Previous')
+                                        .setStyle(ButtonStyle.Secondary)
+                                        .setDisabled(currentPage === 1),
+                                    new ButtonBuilder()
+                                        .setCustomId('next')
+                                        .setLabel('Next')
+                                        .setStyle(ButtonStyle.Primary)
+                                        .setDisabled(currentPage === totalPages)
+                                )
+                        ]
+                    });
+                } catch (err) {
+                    console.error('Error updating message:', err);
+                }
             });
 
             collector.on('end', () => {
@@ -120,12 +129,12 @@ module.exports = {
                                     .setDisabled(true)
                             )
                     ]
-                });
+                }).catch(err => console.error('Error editing message on collector end:', err));
             });
         } catch (error) {
-            console.error('Error fetching results:', error);
+            console.error('Error fetching news:', error);
             await interaction.editReply({
-                content: 'There was an error fetching results. Please try again later.',
+                content: 'There was an error fetching news articles. Please try again later.',
             });
         }
     },
