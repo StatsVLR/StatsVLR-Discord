@@ -18,41 +18,33 @@ module.exports = {
             }
 
             const results = response.data.data;
-            const maxEmbedsPerPage = 10;
-            const totalPages = Math.ceil(results.length / maxEmbedsPerPage);
+            const totalPages = results.length;
 
-            const createEmbeds = (page) => {
-                const embeds = [];
-                const start = (page - 1) * maxEmbedsPerPage;
-                const end = Math.min(start + maxEmbedsPerPage, results.length);
+            const createEmbed = (page) => {
+                const result = results[page - 1];
+                const embed = new EmbedBuilder()
+                    .setTitle(`Event: ${result.event}`)
+                    .setDescription(`Tournament: ${result.tournament}`)
+                    .setColor(embedColor)
+                    .setThumbnail(result.img)
+                    .setTimestamp()
+                    .setFooter({ text: `Page ${page} of ${totalPages}` });
 
-                for (let i = start; i < end; i++) {
-                    const result = results[i];
-                    const embed = new EmbedBuilder()
-                        .setTitle(`Event: ${result.event}`)
-                        .setDescription(`Tournament: ${result.tournament}`)
-                        .setColor(embedColor)
-                        .setThumbnail(result.img)
-                        .setTimestamp();
-
-                    result.teams.forEach(team => {
-                        embed.addFields(
-                            { name: team.name, value: `Score: ${team.score}`, inline: true }
-                        );
-                    });
-
+                result.teams.forEach(team => {
                     embed.addFields(
-                        { name: 'Status', value: result.status, inline: true },
-                        { name: 'Ago', value: result.ago, inline: true }
+                        { name: team.name, value: `Score: ${team.score}`, inline: true }
                     );
+                });
 
-                    embeds.push(embed);
-                }
+                embed.addFields(
+                    { name: 'Status', value: result.status, inline: true },
+                    { name: 'Ago', value: result.ago, inline: true }
+                );
 
-                return embeds;
+                return embed;
             };
 
-            const embedPages = createEmbeds(1);
+            const embed = createEmbed(1);
 
             const components = [];
             if (totalPages > 1) {
@@ -73,7 +65,7 @@ module.exports = {
             }
 
             const message = await interaction.editReply({
-                embeds: embedPages,
+                embeds: [embed],
                 components: components
             });
 
@@ -89,10 +81,10 @@ module.exports = {
                     currentPage--;
                 }
 
-                const newEmbeds = createEmbeds(currentPage);
+                const newEmbed = createEmbed(currentPage);
 
                 await i.update({
-                    embeds: newEmbeds,
+                    embeds: [newEmbed],
                     components: [
                         new ActionRowBuilder()
                             .addComponents(
