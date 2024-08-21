@@ -32,6 +32,7 @@ module.exports = {
                         { name: 'Status', value: match.status },
                         { name: 'In', value: match.in }
                     )
+                    .setFooter({ text: `Page ${page} of ${totalPages}` })
                     .setTimestamp();
 
                 return embed;
