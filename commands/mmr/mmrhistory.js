@@ -49,28 +49,34 @@ module.exports = {
             }
 
             const mmrHistory = data.data;
-            const totalPages = Math.ceil(mmrHistory.length / 5);
+            const totalPages = mmrHistory.length;
 
-            const createEmbed = (page) => {
-                const start = (page - 1) * 5;
-                const end = Math.min(start + 5, mmrHistory.length);
-                const historyOnPage = mmrHistory.slice(start, end);
+            const createEmbed = (index) => {
+                const entry = mmrHistory[index];
+                if (!entry) return;
+
+                const date = new Date(entry.date_raw * 1000);
+                const formattedDate = `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
 
                 const embed = new EmbedBuilder()
-                    .setTitle(`MMR History - ${name}#${tag} (${region.toUpperCase()})`)
+                    .setTitle(`Match ID: ${entry.match_id}`)
                     .setColor(embedColor)
-                    .setDescription(historyOnPage.map((entry, index) => 
-                        `${start + index + 1}. **Match ID:** ${entry.match_id}\n` +
-                        `**Current Tier:** ${entry.currenttier_patched}\n` +
-                        `**Date:** ${new Date(entry.timestamp).toLocaleDateString()}\n`
-                    ).join('\n'))
-                    .setFooter({ text: `Page ${page} of ${totalPages}` })
+                    .addFields(
+                        { name: 'Current Tier', value: entry.currenttier_patched || 'N/A', inline: true },
+                        { name: 'ELO', value: entry.elo?.toString() || 'N/A', inline: true },
+                        { name: 'MMR Change', value: entry.mmr_change_to_last_game?.toString() || 'N/A', inline: true },
+                        { name: 'Date', value: formattedDate, inline: false },
+                        { name: 'Map', value: entry.map?.name || 'N/A', inline: true },
+                        { name: 'Ranking in Tier', value: entry.ranking_in_tier?.toString() || 'N/A', inline: true }
+                    )
+                    .setThumbnail(entry.images?.small || 'https://via.placeholder.com/150')
+                    .setFooter({ text: `Page ${index + 1} of ${totalPages}` })
                     .setTimestamp();
 
                 return embed;
             };
 
-            const embed = createEmbed(1);
+            const embed = createEmbed(0);
 
             const components = [];
             if (totalPages > 1) {
@@ -98,7 +104,7 @@ module.exports = {
             const filter = i => ['previous', 'next'].includes(i.customId) && i.user.id === interaction.user.id;
             const collector = message.createMessageComponentCollector({ filter, time: 60000 });
 
-            let currentPage = 1;
+            let currentPage = 0;
 
             collector.on('collect', async i => {
                 if (i.customId === 'next') {
@@ -118,12 +124,12 @@ module.exports = {
                                     .setCustomId('previous')
                                     .setLabel('Previous')
                                     .setStyle(ButtonStyle.Secondary)
-                                    .setDisabled(currentPage === 1),
+                                    .setDisabled(currentPage === 0),
                                 new ButtonBuilder()
                                     .setCustomId('next')
                                     .setLabel('Next')
                                     .setStyle(ButtonStyle.Primary)
-                                    .setDisabled(currentPage === totalPages)
+                                    .setDisabled(currentPage === totalPages - 1)
                             )
                     ]
                 });
